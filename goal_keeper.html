@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Goal Keeper</title>
+  <style>
+    canvas {
+      background-color: #a5bd7b;
+    }
+  </style>
+</head>
+<body onload="startGame()">
+
+  <!-- 
+  <div class="container bg-1 text-center">
+    <div class="row">
+      <div class="alert alert-info">
+        <div id="info"></div>
+      </div>
+      <canvas id="gc" width="400" height="400"></canvas>
+      <div class="container-fluid bg-2 text-center">
+        <button type="button" class="btn btn-default" onclick="resetScore()">Reset</button>
+      </div>
+
+    </div>
+  </div>
+-->
+    <!--
+  <main role="main">
+    <article role="article">
+      <header role="banner">
+        <h1>Your score is:</h1>
+      </header>
+      <section>
+        <canvas id="playing_field" width="300" height="250"></canvas>
+      </section>
+    </article>
+  </main>
+  -->
+<!-- SCRIPT STARTS HERE -->  
+<script>
+  var myGamePiece;
+  var myGoal;
+  var myGoalKeeper;
+  var myScore;
+
+function startGame() {
+  myGamePiece = new component(20, 20, "red", 140, 10);
+  myGoal = new component (200, 40, "black", 50, 210);
+  myGoalKeeper = new component (40, 20, "#666", 130, 180);
+//  myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+  myGameArea.start();
+}
+  
+var myGameArea = {
+  canvas : document.createElement("canvas"),
+  start : function() {
+    this.canvas.width = 300;
+    this.canvas.height = 250;
+    this.context = this.canvas.getContext("2d");
+    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    //this.frameNo = 0;
+    this.interval = setInterval(updateGameArea, 20);
+    /*
+    window.addEventListener('keydown', function (e) {
+      myGameArea.key = e.keyCode;
+    })
+    window.addEventListener('keyup', function (e) {
+      myGameArea.key = false;
+    }) */
+  },
+  clear : function() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  },
+  //adds stop method that stops ball movement when keeper catches the ball
+  stop : function() {
+    clearInterval(this.interval);
+  }
+}
+function component(width, height, color, x, y) {
+  this.width = width;
+  this.height = height;
+  this.speedX = 0;
+  this.speedY = 0;
+  this.x = x;
+  this.y = y; 
+  this.update = function() {
+    ctx = myGameArea.context;
+    ctx.fillStyle = color;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
+  //new Position - changes position of the ball
+  this.newPos = function() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+  }
+  //when keeper catches the ball
+  this.crashWith = function(otherobj) {
+    var myleft = this.x;
+    var myright = this.x + (this.width);
+    var mytop = this.y;
+    var mybottom = this.y + (this.height);
+    var otherleft = otherobj.x;
+    var otherright = otherobj.x + (otherobj.width);
+    var othertop = otherobj.y;
+    var otherbottom = otherobj.y + (otherobj.height);
+    var crash = true;
+    if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+      crash = false;
+    }
+    return crash;
+  }
+}
+/* Clear game without stop method  
+function updateGameArea() {
+  myGameArea.clear();
+  myGoalKeeper.newPos();
+  myGamePiece.y += 1;
+  myGamePiece.update();
+  myGoal.update();
+  myGoalKeeper.update();
+}
+*/
+// stops ball:
+function updateGameArea() {
+  //stops movement of caught ball:
+  if (myGamePiece.crashWith(myGoalKeeper)) {
+    myGameArea.stop();
+  } else {
+    myGameArea.clear();
+    //myGamePiece.x +=1;
+    
+      //Controls Keeper with keyboard:
+      myGamePiece.speedX = 0;
+      myGamePiece.speedY = 0; 
+      if (myGameArea.key && myGameArea.key == 37) {myGamePiece.speedX = -1; }
+      if (myGameArea.key && myGameArea.key == 39) {myGamePiece.speedX = 1; }
+      if (myGameArea.key && myGameArea.key == 38) {myGamePiece.speedY = -1; }
+      if (myGameArea.key && myGameArea.key == 40) {myGamePiece.speedY = 1; }
+      
+    myGoalKeeper.newPos();
+    myGamePiece.y += 1;
+    myGamePiece.update();
+    myGoal.update();
+    myGoalKeeper.update();
+  }
+}
+
+  
+function moveLeft() {
+  myGoalKeeper.speedX -= 1;
+}
+function moveRight() {
+  myGoalKeeper.speedX += 1;
+}
+function stopMove() {
+  myGoalKeeper.speedX = 0;
+  myGoalKeeper.speedY = 0;  
+}
+  
+  </script>
+  <button onmousedown="moveLeft()" onmouseup="stopMove()" ontouchstart="moveLeft()">Left</button>
+  <button onmousedown="moveRight()" onmouseup="stopMove()" ontouchstart="moveRight()">Right</button>
+  <!--
+  <button onclick="moveLeft()">Left</button>
+  <button onclick="moveRight()">Right</button>
+-->
+</body>
+</html>
