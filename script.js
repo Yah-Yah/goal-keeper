@@ -1,22 +1,57 @@
-  var canvas = document.getElementById("myCanvas");
-  var ctx = canvas.getContext("2d");
+//intro banner that leads to the game
+
+    var gameStarted = false;
+
+
+    function intro_screen(){
+      context.font = "38px ArcadeClassic";
+      context.fillStyle = "#0099CC";
+      context.textAlign = "center";
+      context.fillText("FOOTBALL", canvas.width/2, 162);
+
+      context.font = "10px ArcadeClassic";
+      context.fillStyle = "#fff";
+      context.fillText("Press Spacebar", canvas.width/2, 220);
+    }
+
+    document.body.addEventListener("keydown", function(event){
+      if(event.keyCode == 32 && !gameStarted){
+        startGame();
+      }
+    });
+
+    function startGame(){
+      gameStarted = true;
+      clearCanvas();
+
+      setInterval(function(){
+        clearCanvas();
+        loop();
+      }, 1000/30)
+    }
+
+
+    function clearCanvas(){
+      context.clearRect(0, 0, 300, 250);
+    }
+
+    intro_screen();
+
+//Games starts from here:
+
+var canvas, ctx;
   var ballRadius = 10;
-  var x = canvas.width/2;
-  var y = canvas.height-200;
+  var x, y;
   var dx = Math.floor((Math.random() * 10) + 1);
   var dy = Math.floor((Math.random() * 10) + 1);
   var paddleHeight = 20;
   var paddleWidth = 40;
-  var paddleX = (canvas.width-paddleWidth)/2;
+  var paddleX;
   var rightPressed = false;
   var leftPressed = false;
   //var score = 0;
   var lives = 3;
-  
-  //controls GoalKeeper movement with keyboard
-  document.addEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("keyup", keyUpHandler, false);
-  
+
   function keyDownHandler(e) {
     if(e.keyCode == 39) {
       rightPressed = true;
@@ -34,7 +69,7 @@
       leftPressed = false;
     }
   }
-  
+
 //brings Ball element to the game
   function drawBall() {
     ctx.beginPath();
@@ -43,7 +78,7 @@
     ctx.fill();
     ctx.closePath();
   }
-  
+
 //brings GoalKeeper element to the game
   function drawPaddle() {
     ctx.beginPath();
@@ -52,7 +87,7 @@
     ctx.fill();
     ctx.closePath();
 }
-  
+
 //brings Goal element to the game
   function drawGoal() {
     ctx.beginPath();
@@ -67,13 +102,13 @@
     ctx.fillStyle = "#666";
     ctx.fillText("Score: " + score, 8, 20);
   }
-  
+
   function drawLives() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#666";
     ctx.fillText("Lives: " + lives, canvas.width-65, 20);
   }*/
-  
+
   //where it all happens:
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -90,14 +125,14 @@
     } else if(leftPressed && paddleX > 0) {
       paddleX -= 7;
     }
-    
+
     //bouncing off the paddle
     if(y + dy < ballRadius) {
       dy = -dy;
     } else if(y + dy > canvas.height-ballRadius) {
       if(x > paddleX && x < paddleX + paddleWidth) {
         dy = -dy;
-      } else { 
+      } else {
         lives--;
         if(!lives) {
           alert("GAME OVER");
@@ -123,45 +158,23 @@
       dy = -dy;
     }
 }
+
+window.addEventListener('keydown', function() {
   
+}
+/*
+window.addEventListener('load', function() {
+
+  canvas = document.getElementById("myCanvas");
+  ctx = canvas.getContext("2d");
+  x = canvas.width/2;
+  y = canvas.height-200;
+  paddleX = (canvas.width-paddleWidth)/2;
+
+  //controls GoalKeeper movement with keyboard
+  document.addEventListener("keydown", keyDownHandler, false);
+  document.addEventListener("keyup", keyUpHandler, false);
+
   setInterval(draw, 10);
-  
-  /* all elements of the game: ball, keeper and goal:
-  ctx.beginPath();
-  ctx.arc(150, 20, 10, 0, Math.PI*2);
-  ctx.fillStyle = "red";
-  ctx.fill();
-  ctx.closePath();
-  
-  ctx.beginPath();
-  ctx.rect(130, 180, 40, 20);
-  ctx.fillStyle = "#666";
-  ctx.fill();
-  ctx.closePath();
-  
-  ctx.beginPath();
-  ctx.rect(50, 210, 200, 40);
-  ctx.strokeStyle = "black";
-  ctx.stroke();
-  ctx.closePath();
-  */
-  /*detect goal:
-  function detectGoal() {
-    for(c=0; c<brickColumnCount; c++) {
-      for(r=0; r<brickRowCount; r++) {
-        var b = bricks[c][r];
-        if(b.status == 1) {
-          if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
-            dy = -dy;
-            b.status = 0;
-            score++;
-            if(score == brickRowCount*brickColumnCount) {
-              alert("YOU WIN, CONGRATS!");
-              document.location.reload();
-            }
-          }
-        }
-      }
-    }
-  } */
-  
+  });
+*/
