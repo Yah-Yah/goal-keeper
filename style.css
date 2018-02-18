@@ -4,8 +4,46 @@
   margin: 0; 
 }
 
+@font-face {
+font-family: 'ArcadeClassic';
+src: url('ArcadeClassic.eot');
+src: url('ArcadeClassic.eot?#iefix') format('embedded-opentype'),
+    url('ArcadeClassic.ttf') format('ttf'),
+    url('ArcadeClassic.woff2') format('woff2'),
+    url('ArcadeClassic.woff') format('woff');
+font-weight: normal;
+font-style: normal;
+}
+
+body {
+  font-family: "ArcadeClassic";
+  background: #000000;
+}
+
 canvas {
   background: #a5bd7b;
   display: block; 
   margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -125px;
+}
+
+.banner {
+  background: radial-gradient(circle, #373737, #000);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -125px;
+}
+
+.dude {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  height: 80px;
+  opacity: 0;
 }
