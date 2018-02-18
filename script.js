@@ -159,10 +159,6 @@ var canvas, ctx;
     }
 }
 
-window.addEventListener('keydown', function() {
-  
-}
-/*
 window.addEventListener('load', function() {
 
   canvas = document.getElementById("myCanvas");
@@ -177,4 +173,4 @@ window.addEventListener('load', function() {
 
   setInterval(draw, 10);
   });
-*/
+
