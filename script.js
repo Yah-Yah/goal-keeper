@@ -1,4 +1,4 @@
-//define all variables I'm going to use in this code:
+//defines all variables I'm going to use in this code:
 var canvas, ctx;
 var ballRadius = 10;
 var x, y;
@@ -15,10 +15,10 @@ var lives = 3;
 //intro banner that leads to the game
 var gameStarted = false;
 
-//draws bacground of the intro screen banner
+//draws background of the intro screen banner
 function drawBG() {
   ctx.beginPath();
-  ctx.rect(0, 0, 300, 250);
+  ctx.rect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = "#666";
   ctx.fill();
   ctx.closePath();
@@ -37,33 +37,23 @@ function intro_screen(){
   ctx.fillText("Press Spacebar", canvas.width/2, 220);
 }
 
-/*
-document.body.addEventListener("keydown", function(event){
-  if(event.keyCode == 32 && !gameStarted){
-    startGame();
-  }
-});
-*/
 function startGame(){
   gameStarted = true;
   clearCanvas();
+  
+  //controls GoalKeeper movement with keyboard
+  document.addEventListener("keydown", keyDownHandler, false);
+  document.addEventListener("keyup", keyUpHandler, false);
 
   setInterval(function(){
-    clearCanvas();
-    loop();
+    //clearCanvas();
+    draw();
   }, 1000/30)
 }
 
-/*
-function loop(){
-  console.log('game running');
-}
-*/
-
 function clearCanvas(){
-  ctx.clearRect(0, 0, 300, 250);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
-
 
 //Games starts from here:
 
@@ -106,7 +96,7 @@ function drawLives() {
   ctx.fillText("Lives: " + lives, canvas.width-65, 20);
 }*/
 
-/*
+
 //controls GoalKeeper movement with keyboard Right and Left key
 function keyDownHandler(e) {
   if(e.keyCode == 39) {
@@ -125,11 +115,10 @@ function keyUpHandler(e) {
     leftPressed = false;
   }
 }
-*/
 
 //where it all happens:
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  clearCanvas();
   drawGoal();
   drawPaddle();
   drawBall();
@@ -194,12 +183,4 @@ window.addEventListener('load', function() {
   
   //intro screen with animation banner loads:
   intro_screen();
-
-  /*
-  //controls GoalKeeper movement with keyboard
-  document.addEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("keyup", keyUpHandler, false);
-
-  setInterval(draw, 10);
-  */
   });
