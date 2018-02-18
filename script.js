@@ -7,11 +7,14 @@ var dx = Math.floor((Math.random() * 10) + 1);
 var dy = Math.floor((Math.random() * 10) + 1);
 var keeperHeight = 20;
 var keeperWidth = 40;
-var keeperX;
+var keeperX, keeperY;
 var rightPressed = false;
 var leftPressed = false;
 //var score = 0;
 var lives;
+var goalX, goalY;
+var goalWidth = 200;
+var goalHeight = 40;
 
 //intro screen banner that leads to the game
 var gameStarted = false;
@@ -57,8 +60,12 @@ function startGame(){
   gameStarted = true;
   clearCanvas();
   
-  //places goalkeeper in the middle of the field
+  //places goalkeeper in the middle of the field 10px above goal:
   keeperX = (canvas.width-keeperWidth)/2;
+  keeperY = (canvas.height-keeperHeight-goalHeight)-10;
+  //places goal in the middle of the field at the bottom of the canvas
+  goalX = (canvas.width-goalWidth)/2;
+  goalY = (canvas.height-goalHeight);
   
   //controls GoalKeeper movement with keyboard
   document.addEventListener("keydown", keyDownHandler, false);
@@ -85,7 +92,7 @@ function clearCanvas(){
 //brings GoalKeeper element to the game
   function drawKeeper() {
     ctx.beginPath();
-    ctx.rect(keeperX, 180, keeperWidth, keeperHeight);
+    ctx.rect(keeperX, keeperY, keeperWidth, keeperHeight);
     ctx.fillStyle = "#666";
     ctx.fill();
     ctx.closePath();
@@ -94,7 +101,7 @@ function clearCanvas(){
 //brings Goal element to the game
 function drawGoal() {
   ctx.beginPath();
-  ctx.rect(50, 210, 200, 40);
+  ctx.rect(goalX, goalY, goalWidth, goalHeight);
   ctx.strokeStyle = "black";
   ctx.stroke();
   ctx.closePath();
@@ -150,29 +157,7 @@ function draw() {
   } else if(leftPressed && keeperX > 0) {
     keeperX -= 7;
   }
-  //bouncing off the keeper
-  /*
-  if(y + dy < ballRadius) {
-    dy = -dy;
-  } else if(y + dy > canvas.height-ballRadius) {
-    if(x > keeperX && x < keeperX + keeperWidth) {
-      dy = -dy;
-    } else {
-      lives--;
-      if(!lives) {
-        alert("GAME OVER");
-        document.location.reload();
-      }
-      else {
-        x = canvas.width/2;
-        y = canvas.height-30;
-        dx = 2;
-        dy = -2;
-        keeperX = (canvas.width-keeperWidth)/2;
-      }
-    }
-  }
-  */
+  
   //bouncing off the walls:
   if(y + dy > canvas.height - ballRadius || y + dy < 0) {
     dy = -dy;
@@ -195,8 +180,4 @@ window.addEventListener('load', function() {
   //intro screen with animation banner loads:
   introScreen();
 
-  /*
-
-  setInterval(draw, 10);
-  */
   });
