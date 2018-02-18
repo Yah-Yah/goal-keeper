@@ -15,7 +15,18 @@ var lives = 3;
 //intro banner that leads to the game
 var gameStarted = false;
 
+//draws bacground of the intro screen banner
+function drawBG() {
+  ctx.beginPath();
+  ctx.rect(0, 0, 300, 250);
+  ctx.fillStyle = "#666";
+  ctx.fill();
+  ctx.closePath();
+}
+
 function intro_screen(){
+  drawBG();
+
   ctx.font = "38px ArcadeClassic";
   ctx.fillStyle = "#0099CC";
   ctx.textAlign = "center";
@@ -25,6 +36,7 @@ function intro_screen(){
   ctx.fillStyle = "#fff";
   ctx.fillText("Press Spacebar", canvas.width/2, 220);
 }
+
 /*
 document.body.addEventListener("keydown", function(event){
   if(event.keyCode == 32 && !gameStarted){
@@ -54,23 +66,6 @@ function clearCanvas(){
 
 
 //Games starts from here:
-function keyDownHandler(e) {
-  if(e.keyCode == 39) {
-    rightPressed = true;
-  }
-  else if(e.keyCode == 37) {
-    leftPressed = true;
-  }
-}
-
-function keyUpHandler(e) {
-  if(e.keyCode == 39) {
-    rightPressed = false;
-  }
-  else if(e.keyCode == 37) {
-    leftPressed = false;
-  }
-}
 
 //brings Ball element to the game
   function drawBall() {
@@ -110,6 +105,27 @@ function drawLives() {
   ctx.fillStyle = "#666";
   ctx.fillText("Lives: " + lives, canvas.width-65, 20);
 }*/
+
+/*
+//controls GoalKeeper movement with keyboard Right and Left key
+function keyDownHandler(e) {
+  if(e.keyCode == 39) {
+    rightPressed = true;
+  }
+  else if(e.keyCode == 37) {
+    leftPressed = true;
+  }
+}
+
+function keyUpHandler(e) {
+  if(e.keyCode == 39) {
+    rightPressed = false;
+  }
+  else if(e.keyCode == 37) {
+    leftPressed = false;
+  }
+}
+*/
 
 //where it all happens:
 function draw() {
@@ -162,8 +178,6 @@ function draw() {
 
 //waits for the DOM to load and then starts script
 window.addEventListener('load', function() {
-  //intro screen with animation banner loads:
-  intro_screen();
   
   //listens for the space press to enter the game
   document.body.addEventListener("keydown", function(event){
@@ -177,10 +191,15 @@ window.addEventListener('load', function() {
   x = canvas.width/2;
   y = canvas.height-200;
   paddleX = (canvas.width-paddleWidth)/2;
+  
+  //intro screen with animation banner loads:
+  intro_screen();
 
+  /*
   //controls GoalKeeper movement with keyboard
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
 
   setInterval(draw, 10);
+  */
   });
