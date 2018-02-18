@@ -1,30 +1,35 @@
 //defines all variables I'm going to use in this code:
 var canvas, ctx;
+var fps = 60;
 var ballRadius = 10;
 var x, y;
 var dx = Math.floor((Math.random() * 10) + 1);
 var dy = Math.floor((Math.random() * 10) + 1);
-var paddleHeight = 20;
-var paddleWidth = 40;
-var paddleX;
+var keeperHeight = 20;
+var keeperWidth = 40;
+var keeperX;
 var rightPressed = false;
 var leftPressed = false;
 //var score = 0;
-var lives = 3;
+var lives;
 
-//intro banner that leads to the game
+//intro screen banner that leads to the game
 var gameStarted = false;
 
 //draws background of the intro screen banner
 function drawBG() {
   ctx.beginPath();
+  var grd=ctx.createRadialGradient(canvas.width/2,canvas.height/2,20,canvas.width/2,canvas.height/2,150);
+  grd.addColorStop(0,"#373737");
+  grd.addColorStop(1,"black");
   ctx.rect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#666";
+  ctx.fillStyle = grd;
+  ctx.fillRect(10,10,150,100);
   ctx.fill();
   ctx.closePath();
 }
 
-function intro_screen(){
+function introScreen(){
   drawBG();
 
   ctx.font = "38px ArcadeClassic";
@@ -35,27 +40,38 @@ function intro_screen(){
   ctx.font = "10px ArcadeClassic";
   ctx.fillStyle = "#fff";
   ctx.fillText("Press Spacebar", canvas.width/2, 220);
+  
+  //listens for the space press to enter the game
+  document.body.addEventListener("keydown", function(event){
+    if(event.keyCode == 32 && !gameStarted){
+      startGame();
+    }
+  });
 }
 
+
+//Games starts from here:
+
 function startGame(){
+  lives = 3;
   gameStarted = true;
   clearCanvas();
+  
+  //places goalkeeper in the middle of the field
+  keeperX = (canvas.width-keeperWidth)/2;
   
   //controls GoalKeeper movement with keyboard
   document.addEventListener("keydown", keyDownHandler, false);
   document.addEventListener("keyup", keyUpHandler, false);
 
   setInterval(function(){
-    //clearCanvas();
     draw();
-  }, 1000/30)
+  }, 1000/fps)
 }
 
 function clearCanvas(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
-
-//Games starts from here:
 
 //brings Ball element to the game
   function drawBall() {
@@ -67,9 +83,9 @@ function clearCanvas(){
   }
 
 //brings GoalKeeper element to the game
-  function drawPaddle() {
+  function drawKeeper() {
     ctx.beginPath();
-    ctx.rect(paddleX, 180, paddleWidth, paddleHeight);
+    ctx.rect(keeperX, 180, keeperWidth, keeperHeight);
     ctx.fillStyle = "#666";
     ctx.fill();
     ctx.closePath();
@@ -116,27 +132,30 @@ function keyUpHandler(e) {
   }
 }
 
+
 //where it all happens:
 function draw() {
   clearCanvas();
   drawGoal();
-  drawPaddle();
+  drawKeeper();
   drawBall();
   //drawScore;
   //drawLives;
+  //drawGoals;
   x += dx;
   y += dy;
   //moves goalkeeper with keyboard but within canvas edges
-  if(rightPressed && paddleX < canvas.width-paddleWidth) {
-    paddleX += 7;
-  } else if(leftPressed && paddleX > 0) {
-    paddleX -= 7;
+  if(rightPressed && keeperX < canvas.width-keeperWidth) {
+    keeperX += 7;
+  } else if(leftPressed && keeperX > 0) {
+    keeperX -= 7;
   }
-  //bouncing off the paddle
+  //bouncing off the keeper
+  /*
   if(y + dy < ballRadius) {
     dy = -dy;
   } else if(y + dy > canvas.height-ballRadius) {
-    if(x > paddleX && x < paddleX + paddleWidth) {
+    if(x > keeperX && x < keeperX + keeperWidth) {
       dy = -dy;
     } else {
       lives--;
@@ -149,10 +168,11 @@ function draw() {
         y = canvas.height-30;
         dx = 2;
         dy = -2;
-        paddleX = (canvas.width-paddleWidth)/2;
+        keeperX = (canvas.width-keeperWidth)/2;
       }
     }
   }
+  */
   //bouncing off the walls:
   if(y + dy > canvas.height - ballRadius || y + dy < 0) {
     dy = -dy;
@@ -167,20 +187,16 @@ function draw() {
 
 //waits for the DOM to load and then starts script
 window.addEventListener('load', function() {
-  
-  //listens for the space press to enter the game
-  document.body.addEventListener("keydown", function(event){
-    if(event.keyCode == 32 && !gameStarted){
-      startGame();
-    }
-  });
-
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
   x = canvas.width/2;
   y = canvas.height-200;
-  paddleX = (canvas.width-paddleWidth)/2;
   
   //intro screen with animation banner loads:
-  intro_screen();
+  introScreen();
+
+  /*
+
+  setInterval(draw, 10);
+  */
   });
