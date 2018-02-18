@@ -13,13 +13,13 @@
       context.fillStyle = "#fff";
       context.fillText("Press Spacebar", canvas.width/2, 220);
     }
-
+/*
     document.body.addEventListener("keydown", function(event){
       if(event.keyCode == 32 && !gameStarted){
         startGame();
       }
     });
-
+*/
     function startGame(){
       gameStarted = true;
       clearCanvas();
@@ -30,6 +30,11 @@
       }, 1000/30)
     }
 
+    /*
+    function loop(){
+      console.log('game running');
+    }
+    */
 
     function clearCanvas(){
       context.clearRect(0, 0, 300, 250);
@@ -159,7 +164,15 @@ var canvas, ctx;
     }
 }
 
+//waits for the DOM to load and then starts script
 window.addEventListener('load', function() {
+  
+  //listens for the space press to enter the game
+  document.body.addEventListener("keydown", function(event){
+    if(event.keyCode == 32 && !gameStarted){
+      startGame();
+    }
+  });
 
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
@@ -173,4 +186,3 @@ window.addEventListener('load', function() {
 
   setInterval(draw, 10);
   });
-
