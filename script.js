@@ -5,16 +5,17 @@ var ballRadius = 10;
 var x, y;
 var dx = Math.floor((Math.random() * 10) + 1);
 var dy = Math.floor((Math.random() * 10) + 1);
-var keeperHeight = 20;
-var keeperWidth = 40;
 var keeperX, keeperY;
+var keeperWidth = 40;
+var keeperHeight = 20;
+var goalX, goalY;
+var goalWidth = 200;
+var goalHeight = 40;
 var rightPressed = false;
 var leftPressed = false;
 //var score = 0;
 var lives;
-var goalX, goalY;
-var goalWidth = 200;
-var goalHeight = 40;
+
 
 //intro screen banner that leads to the game
 var gameStarted = false;
@@ -34,11 +35,21 @@ function drawBG() {
 
 function introScreen(){
   drawBG();
+    
+  ctx.font = "56px ArcadeClassic";
+  ctx.fillStyle = "black";
+  ctx.strokeStyle = "#2cfdc9";
+  ctx.textAlign = "center";
+  ctx.fillText("Phantom", canvas.width/2, 122);
+  ctx.strokeText("Phantom", canvas.width/2, 122);
 
   ctx.font = "38px ArcadeClassic";
-  ctx.fillStyle = "#0099CC";
+  ctx.fillStyle = "black";
+  ctx.strokeStyle = "#2cfdc9";
   ctx.textAlign = "center";
   ctx.fillText("FOOTBALL", canvas.width/2, 162);
+  ctx.strokeText("FOOTBALL", canvas.width/2, 162);
+  //ctx.letterSpacing = "3";
 
   ctx.font = "10px ArcadeClassic";
   ctx.fillStyle = "#fff";
@@ -112,7 +123,6 @@ function drawScore() {
   ctx.fillStyle = "#666";
   ctx.fillText("Score: " + score, 8, 20);
 }
-
 function drawLives() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#666";
@@ -139,6 +149,16 @@ function keyUpHandler(e) {
   }
 }
 
+/* NOT SURE ABOUT THAT
+function resetKeeper() {  
+  keeperX = (canvas.width-keeperWidth)/2;
+}
+
+function resetBall() {
+  x += dx;
+  y += dy;
+}
+*/
 
 //where it all happens:
 function draw() {
@@ -157,7 +177,7 @@ function draw() {
   } else if(leftPressed && keeperX > 0) {
     keeperX -= 7;
   }
-  
+  /*
   //bouncing off the walls:
   if(y + dy > canvas.height - ballRadius || y + dy < 0) {
     dy = -dy;
@@ -168,14 +188,72 @@ function draw() {
   if(y + dy > canvas.height - ballRadius || y + dy < 0) {
     dy = -dy;
   }
+  */
+  
+  //NIEDOKONCZONE!!!!!!
+  //bouncing off walls
+  if(x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+    dx = -dx;
+  }
+  //Game Over when ball reaches bottom and Keeper catches the ball
+  if(y + dy > canvas.height-ballRadius) {
+      if(x > keeperX && x < keeperX + keeperWidth) {
+        alert("Score!");
+        //lives--;
+        //resetKeeper();
+  } else if(y + dy < ballRadius) {
+    dy = -dy;
+      } else {
+        lives--;
+        if(!lives) {
+        alert("Goal");
+        //resetKeeper();
+        //resetBall();
+        //document.location.reload();
+        }
+      }
+  }
+  
+  /*
+  //bouncing off the keeper
+  if(y + dy < ballRadius) {
+    dy = -dy;
+  } else if(y + dy > canvas.height-ballRadius) {
+    if(x > keeperX && x < keeperX + keeperWidth) {
+      dy = -dy;
+    } else {
+      lives--;
+      if(!lives) {
+        alert("GAME OVER");
+        document.location.reload();
+      }
+      else {
+        x = canvas.width/2;
+        y = canvas.height-30;
+        dx = 2;
+        dy = -2;
+        keeperX = (canvas.width-keeperWidth)/2;
+      }
+    }
+  }*/
+  
 }
 
 //waits for the DOM to load and then starts script
 window.addEventListener('load', function() {
   canvas = document.getElementById("myCanvas");
   ctx = canvas.getContext("2d");
+  
+  //defines starting point of a ball:
   x = canvas.width/2;
   y = canvas.height-200;
+  
+  //places goal in the middle of the field at the bottom of the canvas
+  goalX = (canvas.width-goalWidth)/2;
+  goalY = (canvas.height-goalHeight);
+  //places goalkeeper 10px above goal:
+  keeperY = goalY-keeperHeight-10;
+  
   
   //intro screen with animation banner loads:
   introScreen();
