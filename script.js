@@ -13,8 +13,10 @@ var goalWidth = 200;
 var goalHeight = 40;
 var rightPressed = false;
 var leftPressed = false;
-//var score = 0;
+var score = 0;
 var lives;
+var goals;
+
 
 
 //intro screen banner that leads to the game
@@ -73,10 +75,10 @@ function startGame(){
   
   //places goalkeeper in the middle of the field 10px above goal:
   keeperX = (canvas.width-keeperWidth)/2;
-  keeperY = (canvas.height-keeperHeight-goalHeight)-10;
+  //keeperY = (canvas.height-keeperHeight-goalHeight)-10;
   //places goal in the middle of the field at the bottom of the canvas
-  goalX = (canvas.width-goalWidth)/2;
-  goalY = (canvas.height-goalHeight);
+  //goalX = (canvas.width-goalWidth)/2;
+  //goalY = (canvas.height-goalHeight);
   
   //controls GoalKeeper movement with keyboard
   document.addEventListener("keydown", keyDownHandler, false);
@@ -117,18 +119,25 @@ function drawGoal() {
   ctx.stroke();
   ctx.closePath();
 }
-/*
-function drawScore() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "#666";
-  ctx.fillText("Score: " + score, 8, 20);
-}
-function drawLives() {
-  ctx.font = "16px Arial";
-  ctx.fillStyle = "#666";
-  ctx.fillText("Lives: " + lives, canvas.width-65, 20);
-}*/
 
+function drawLives() {
+  ctx.font = "10px ArcadeClassic";
+  ctx.fillStyle = "#666";
+  ctx.textAlign = "left";
+  ctx.fillText("Lives: " + lives, canvas.width-290, canvas.height-230);
+}
+function drawGoals() {
+  ctx.font = "10px ArcadeClassic";
+  ctx.fillStyle = "#666";
+  ctx.textAlign = "left";
+  ctx.fillText("Goals: " + goals, canvas.width-290, canvas.height-215);
+}
+function drawScore() {
+  ctx.font = "10px ArcadeClassic";
+  ctx.fillStyle = "#666";
+  ctx.textAlign = "left";
+  ctx.fillText("Score: " + score, canvas.width-290, canvas.height-200);
+}
 
 //controls GoalKeeper movement with keyboard Right and Left key
 function keyDownHandler(e) {
@@ -149,7 +158,7 @@ function keyUpHandler(e) {
   }
 }
 
-/* NOT SURE ABOUT THAT
+// NOT SURE ABOUT THAT
 function resetKeeper() {  
   keeperX = (canvas.width-keeperWidth)/2;
 }
@@ -158,7 +167,7 @@ function resetBall() {
   x += dx;
   y += dy;
 }
-*/
+
 
 //where it all happens:
 function draw() {
@@ -166,9 +175,9 @@ function draw() {
   drawGoal();
   drawKeeper();
   drawBall();
-  //drawScore;
-  //drawLives;
-  //drawGoals;
+  drawScore();
+  drawLives();
+  drawGoals();
   x += dx;
   y += dy;
   //moves goalkeeper with keyboard but within canvas edges
@@ -199,16 +208,17 @@ function draw() {
   if(y + dy > canvas.height-ballRadius) {
       if(x > keeperX && x < keeperX + keeperWidth) {
         alert("Score!");
-        //lives--;
-        //resetKeeper();
+        lives--;
+        resetKeeper();
+        resetBall();
   } else if(y + dy < ballRadius) {
     dy = -dy;
       } else {
         lives--;
         if(!lives) {
         alert("Goal");
-        //resetKeeper();
-        //resetBall();
+        resetKeeper();
+        resetBall();
         //document.location.reload();
         }
       }
