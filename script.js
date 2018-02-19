@@ -35,6 +35,12 @@ function drawBG() {
   ctx.closePath();
 }
 
+function introListener(event) {
+  if(event.keyCode == 32 && !gameStarted){
+      startGame();
+    }
+}
+
 function introScreen(){
   drawBG();
     
@@ -58,11 +64,8 @@ function introScreen(){
   ctx.fillText("Press Spacebar", canvas.width/2, 220);
   
   //listens for the space press to enter the game
-  document.body.addEventListener("keydown", function(event){
-    if(event.keyCode == 32 && !gameStarted){
-      startGame();
-    }
-  });
+  document.addEventListener("keydown", introListener()
+  );
 }
 
 
@@ -72,6 +75,7 @@ function startGame(){
   lives = 3;
   gameStarted = true;
   clearCanvas();
+  document.removeEventListener('keydown', introListener);
   
   //places goalkeeper in the middle of the field 10px above goal:
   keeperX = (canvas.width-keeperWidth)/2;
@@ -79,6 +83,7 @@ function startGame(){
   //places goal in the middle of the field at the bottom of the canvas
   //goalX = (canvas.width-goalWidth)/2;
   //goalY = (canvas.height-goalHeight);
+  resetBall();
   
   //controls GoalKeeper movement with keyboard
   document.addEventListener("keydown", keyDownHandler, false);
@@ -164,8 +169,8 @@ function resetKeeper() {
 }
 
 function resetBall() {
-  x += dx;
-  y += dy;
+  x = canvas.width/2;
+  y = canvas.height-200;
 }
 
 
@@ -200,6 +205,7 @@ function draw() {
   */
   
   //NIEDOKONCZONE!!!!!!
+  /*
   //bouncing off walls
   if(x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
     dx = -dx;
@@ -207,7 +213,7 @@ function draw() {
   //Game Over when ball reaches bottom and Keeper catches the ball
   if(y + dy > canvas.height-ballRadius) {
       if(x > keeperX && x < keeperX + keeperWidth) {
-        alert("Score!");
+        //alert("Score!");
         lives--;
         resetKeeper();
         resetBall();
@@ -216,7 +222,7 @@ function draw() {
       } else {
         lives--;
         if(!lives) {
-        alert("Goal");
+        //alert("Goal");
         resetKeeper();
         resetBall();
         //document.location.reload();
@@ -224,7 +230,7 @@ function draw() {
       }
   }
   
-  /*
+  
   //bouncing off the keeper
   if(y + dy < ballRadius) {
     dy = -dy;
@@ -245,8 +251,14 @@ function draw() {
         keeperX = (canvas.width-keeperWidth)/2;
       }
     }
-  }*/
-  
+  }
+  */
+  if(y+ballRadius >= keeperY && y-ballRadius <= keeperY && x+ballRadius >= keeperX && x-ballRadius <= keeperX) {
+    lives--;
+    score++;
+    resetBall();
+    resetKeeper();
+  }
 }
 
 //waits for the DOM to load and then starts script
@@ -255,8 +267,8 @@ window.addEventListener('load', function() {
   ctx = canvas.getContext("2d");
   
   //defines starting point of a ball:
-  x = canvas.width/2;
-  y = canvas.height-200;
+  //x = canvas.width/2;
+  //y = canvas.height-200;
   
   //places goal in the middle of the field at the bottom of the canvas
   goalX = (canvas.width-goalWidth)/2;
