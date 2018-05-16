@@ -1,5 +1,5 @@
 # goal-keeper
-simple goal-keeper game for Phantom
+simple goal-keeper game
 
 Requirements:
 Create a game, MPU sized  (300pixels x 250 pixels) where you play as a goalkeeper and have to defend 3 shots at goal.  
